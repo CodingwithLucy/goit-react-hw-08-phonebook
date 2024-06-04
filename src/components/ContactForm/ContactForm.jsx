@@ -28,31 +28,34 @@ const ContactForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="form-all">
-      <label>
-        NAME
-        <input
-          type="text"
-          name="name"
-          value={name}
-          onChange={handleChange}
-          className="form-style"
-        />
-      </label>
+    <div>
+      <h1>PHONEBOOK</h1>
+      <form onSubmit={handleSubmit} className="form-all">
+        <label>
+          NAME
+          <input
+            type="text"
+            name="name"
+            value={name}
+            onChange={handleChange}
+            className="form-style"
+          />
+        </label>
 
-      <label>
-        NUMBER
-        <input
-          type="tel"
-          name="number"
-          value={number}
-          onChange={handleChange}
-          className="form-style"
-        />
-      </label>
+        <label>
+          NUMBER
+          <input
+            type="tel"
+            name="number"
+            value={number}
+            onChange={handleChange}
+            className="form-style"
+          />
+        </label>
 
-      <button type="submit">ADD NEW CONTACT</button>
-    </form>
+        <button type="submit">ADD NEW CONTACT</button>
+      </form>
+    </div>
   );
 };
 

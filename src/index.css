@@ -1,4 +1,4 @@
-@import-normalize; /* bring in normalize.css styles */
+@import-normalize;
 
 body {
   margin: 0;
@@ -52,4 +52,9 @@ input {
   border: 2px dotted black;
   padding: 10px 25px;
   background-color: gainsboro;
+}
+
+.app-name {
+  font-size: x-large;
+  color: rgb(98, 6, 183);
 }

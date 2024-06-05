@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchContacts, deleteContact } from '../contactsSlice.js';
 import { nanoid } from 'nanoid';
+import axios from 'axios';
 
 const ContactList = () => {
   const contacts = useSelector(state => state.contacts.contacts);
@@ -18,8 +19,16 @@ const ContactList = () => {
       )
     : [];
 
-  const handleDelete = contactId => {
+  const handleDelete = async contactId => {
     dispatch(deleteContact(contactId));
+    try {
+      await axios.delete(
+        `https://connections-api.herokuapp.com/api/contacts/${contactId}`
+      );
+      console.log('Contact deleted successfully:', contactId);
+    } catch (error) {
+      console.error('Error deleting contact:', error.message);
+    }
   };
 
   return (

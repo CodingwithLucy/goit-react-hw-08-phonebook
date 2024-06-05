@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { addContact } from '../contactsSlice.js';
 
@@ -16,9 +17,18 @@ const ContactForm = () => {
     }
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
     dispatch(addContact({ name, number }));
+    try {
+      const response = await axios.post(
+        'https://connections-api.herokuapp.com/api/contacts',
+        { name, number }
+      );
+      console.log('Contact added successfully:', response.data);
+    } catch (error) {
+      console.error('Error adding contact:', error.message);
+    }
     reset();
   };
 
@@ -28,34 +38,31 @@ const ContactForm = () => {
   };
 
   return (
-    <div>
-      <h1>PHONEBOOK</h1>
-      <form onSubmit={handleSubmit} className="form-all">
-        <label>
-          NAME
-          <input
-            type="text"
-            name="name"
-            value={name}
-            onChange={handleChange}
-            className="form-style"
-          />
-        </label>
+    <form onSubmit={handleSubmit} className="form-all">
+      <label>
+        NAME
+        <input
+          type="text"
+          name="name"
+          value={name}
+          onChange={handleChange}
+          className="form-style"
+        />
+      </label>
 
-        <label>
-          NUMBER
-          <input
-            type="tel"
-            name="number"
-            value={number}
-            onChange={handleChange}
-            className="form-style"
-          />
-        </label>
+      <label>
+        NUMBER
+        <input
+          type="tel"
+          name="number"
+          value={number}
+          onChange={handleChange}
+          className="form-style"
+        />
+      </label>
 
-        <button type="submit">ADD NEW CONTACT</button>
-      </form>
-    </div>
+      <button type="submit">ADD NEW CONTACT</button>
+    </form>
   );
 };
 

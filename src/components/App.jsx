@@ -1,52 +1,92 @@
-import React, { useState } from 'react';
+import React, { useEffect, lazy } from 'react';
+import { useDispatch } from 'react-redux';
 import { Routes, Route } from 'react-router-dom';
+import { Navigation } from './Navigation/Navigation.jsx';
 import { Provider } from 'react-redux';
-import store from '../components/store.js';
-import Home from './Home/Home.jsx';
-import RegisterForm from '../components/RegisterForm/RegisterForm.jsx';
-import LoginForm from '../components/LoginForm/LoginForm.jsx';
-import Navigation from '../components/Navigation/Navigation.jsx';
-import UserMenu from '../components/UserMenu/UserMenu.jsx';
-import ContactForm from '../components/ContactForm/ContactForm.jsx';
-import ContactList from '../components/ContactList/ContactList.jsx';
-import Filter from '../components/Filter/Filter.jsx';
+import { store } from '../components/store.js';
+import { Layout } from './Layout.js';
+import { PrivateRoute } from './PrivateRoute.jsx';
+import { RestrictedRoute } from './RestrictedRoute.jsx';
+import { refreshUser } from './authSlice.js';
+import { useAuth } from './useAuth.js';
 
-const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  return (
-    /*<Provider store={store}>
-      <div>
-        <ContactForm />
-        <Filter />
-        <ContactList />
-      </div>
-    </Provider>*/
+const HomePage = lazy(() => import('../pages/Home.js'));
+const RegisterPage = lazy(() => import('../pages/Register.js'));
+const LoginPage = lazy(() => import('../pages/Login.js'));
+const ContactsPage = lazy(() => import('../pages/Contacts.js'));
+
+export const App = () => {
+  const dispatch = useDispatch();
+  const { isRefreshing } = useAuth();
+
+  useEffect(() => {
+    dispatch(refreshUser());
+  }, [dispatch]);
+
+  /* return (
     <Provider store={store}>
-      {' '}
-      {/* Obejmij RouterProvider Providerem */}
       <div className="App">
-        <Navigation /> {/* Wyświetl nawigację na każdej stronie */}
+        <Navigation />
         <Routes>
-          <Route path="/" element={<Home />} /> {/* Strona główna */}
+          <Route path="/" element={<Home />} />
           <Route
             path="/login"
             element={<LoginForm setIsLoggedIn={setIsLoggedIn} />}
-          />{' '}
-          {/* Formularz logowania */}
-          <Route path="/register" element={<RegisterForm />} />{' '}
-          {/* Formularz rejestracji */}
+          />
+          <Route path="/register" element={<RegisterForm />} />
           {isLoggedIn && (
             <Route
               path="/contacts"
               element={((<ContactForm />), (<Filter />), (<ContactList />))}
             />
-          )}{' '}
-          {/* Pełna funkcjonalność aplikacji */}
+          )}
         </Routes>
-        {isLoggedIn && <UserMenu />} {/* Wyświetl UserMenu po zalogowaniu */}
+        {isLoggedIn && <UserMenu />}
       </div>
     </Provider>
   );
 };
+*/
 
-export default App;
+  return isRefreshing ? (
+    <b>Refreshing user...</b>
+  ) : (
+    <Provider store={store}>
+      <div className="App">
+        <Navigation />
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<HomePage />} />
+            <Route
+              path="/register"
+              element={
+                <RestrictedRoute
+                  redirectTo="/contacts"
+                  component={<RegisterPage />}
+                />
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                <RestrictedRoute
+                  redirectTo="/contacts"
+                  component={<LoginPage />}
+                />
+              }
+            />
+            <Route
+              path="/contacts"
+              element={
+                <PrivateRoute
+                  redirectTo="/login"
+                  component={<ContactsPage />}
+                />
+              }
+            />
+          </Route>
+        </Routes>
+      </div>
+    </Provider>
+  );
+};

@@ -1,35 +1,37 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import axios from 'axios';
 
-const LoginForm = () => {
-  const { register, handleSubmit, errors } = useForm();
+export const LoginForm = () => {
+  const handleSubmit = async e => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const email = form.elements.email.value;
+    const password = form.elements.password.value;
 
-  const onSubmit = data => {
-    // Obsługa zalogowanych danych (np. wysłanie na serwer)
-    console.log(data);
+    try {
+      const response = await axios.post(
+        'https://connections-api.herokuapp.com/api/users/login',
+        { email, password }
+      );
+      const token = response.data.token;
+      console.log('Logged in successfully. Token:', token);
+    } catch (error) {
+      console.error('Error logging in:', error.message);
+    }
+    form.reset();
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input
-        type="email"
-        name="email"
-        placeholder="Email"
-        ref={register({ required: true })}
-      />
-      {errors.email && <p>Email is required</p>}
-
-      <input
-        type="password"
-        name="password"
-        placeholder="Password"
-        ref={register({ required: true })}
-      />
-      {errors.password && <p>Password is required</p>}
-
-      <button type="submit">Login</button>
+    <form onSubmit={handleSubmit} autoComplete="off">
+      <label>
+        Email
+        <input type="email" name="email" />
+      </label>
+      <label>
+        Password
+        <input type="password" name="password" />
+      </label>
+      <button type="submit">Log In</button>
     </form>
   );
 };
-
-export default LoginForm;

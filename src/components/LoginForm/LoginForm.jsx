@@ -18,7 +18,12 @@ export const LoginForm = () => {
     try {
       const response = await axios.post(
         'https://connections-api.herokuapp.com/api/users/login',
-        formData
+        formData,
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          },
+        }
       );
       console.log('Logged in successfully. Token:', response.data.token);
     } catch (error) {

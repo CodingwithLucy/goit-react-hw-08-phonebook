@@ -7,8 +7,8 @@ import { store } from '../components/store.js';
 import { Layout } from './Layout.js';
 import { PrivateRoute } from './PrivateRoute.jsx';
 import { RestrictedRoute } from './RestrictedRoute.jsx';
-import { refreshUser } from './authSlice.js';
-import { useAuth } from './useAuth.js';
+import { refreshUser } from '../redux/auth/authSlice.js';
+import { useAuth } from './hooks/useAuth.js';
 
 const HomePage = lazy(() => import('../pages/Home.js'));
 const RegisterPage = lazy(() => import('../pages/Register.js'));

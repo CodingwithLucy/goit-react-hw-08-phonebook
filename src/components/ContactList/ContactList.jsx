@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchContacts, deleteContact } from '../contactsSlice.js';
+import {
+  fetchContacts,
+  deleteContact,
+} from '../../redux/contacts/contactsSlice.js';
 import { nanoid } from 'nanoid';
 import axios from 'axios';
 

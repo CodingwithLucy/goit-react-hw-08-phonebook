@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { addContact } from '../contactsSlice.js';
+import { addContact } from '../../redux/contacts/contactsSlice.js';
 
 const ContactForm = () => {
   const [name, setName] = useState('');

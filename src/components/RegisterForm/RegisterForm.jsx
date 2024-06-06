@@ -19,7 +19,12 @@ export const RegisterForm = () => {
     try {
       const response = await axios.post(
         'https://connections-api.herokuapp.com/users/signup',
-        formData
+        formData,
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          },
+        }
       );
       console.log('User registered successfully:', response.data);
     } catch (error) {

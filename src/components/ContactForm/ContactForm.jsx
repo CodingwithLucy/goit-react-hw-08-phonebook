@@ -1,69 +1,91 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useDispatch } from 'react-redux';
-import { addContact } from '../../redux/contacts/contactsSlice.js';
+import {
+  useAddContactMutation,
+  useGetContactsQuery,
+} from '../../redux/contacts/contactsSlice.js';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import React from 'react';
 
 const ContactForm = () => {
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
-  const dispatch = useDispatch();
+  const { data } = useGetContactsQuery();
+  const [addContact, { isLoading }] = useAddContactMutation();
 
-  const handleChange = e => {
-    const { name, value } = e.target;
-    if (name === 'name') {
-      setName(value);
-    } else if (name === 'number') {
-      setNumber(value);
+  const isNewName = (contacts, contactName) => {
+    if (contacts.some(({ name }) => name === contactName)) {
+      alert(`${contactName} is already in contacts`);
+      return false;
     }
+    return true;
   };
 
-  const handleSubmit = async e => {
-    e.preventDefault();
-    dispatch(addContact({ name, number }));
-    try {
-      const response = await axios.post(
-        'https://connections-api.herokuapp.com/api/contacts',
-        { name, number }
-      );
-      console.log('Contact added successfully:', response.data);
-    } catch (error) {
-      console.error('Error adding contact:', error.message);
-    }
-    reset();
-  };
+  const formik = useFormik({
+    initialValues,
+    onSubmit: (values, { resetForm }) => {
+      if (isNewName(data, values.name)) {
+        addContact({ name: values.name.trim(), number: values.number.trim() });
+        resetForm();
+      }
+    },
+    validationSchema: schema,
+  });
 
-  const reset = () => {
-    setName('');
-    setNumber('');
-  };
+  const isDisabled = !(formik.isValid && formik.dirty);
 
   return (
-    <form onSubmit={handleSubmit} className="form-all">
-      <label>
-        NAME
+    <form onSubmit={formik.handleSubmit}>
+      <div>
         <input
+          autoComplete="off"
+          placeholder="Name"
           type="text"
           name="name"
-          value={name}
-          onChange={handleChange}
-          className="form-style"
+          onChange={formik.handleChange}
+          value={formik.values.name}
+          required
         />
-      </label>
-
-      <label>
-        NUMBER
+        {formik.errors.name && formik.touched.name ? (
+          <span>{formik.errors.name}</span>
+        ) : null}
+      </div>
+      <div>
         <input
+          autoComplete="off"
+          placeholder="Phone"
           type="tel"
           name="number"
-          value={number}
-          onChange={handleChange}
-          className="form-style"
+          onChange={formik.handleChange}
+          value={formik.values.number}
+          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
         />
-      </label>
-
-      <button type="submit">ADD NEW CONTACT</button>
+        {formik.errors.number && formik.touched.number ? (
+          <span>{formik.errors.number}</span>
+        ) : null}
+      </div>
+      <button type="submit" disabled={isDisabled}>
+        {isLoading ? 'Adding contact...' : 'Add contact'}
+      </button>
     </form>
   );
 };
+
+const pattern = {
+  str: "^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$",
+  number: '+?d{1,4}?[-.s]?(?d{1,3}?)?[-.s]?d{1,4}[-.s]?d{1,4}[-.s]?d{1,9}',
+};
+
+const initialValues = {
+  name: '',
+  number: '',
+};
+
+const schema = yup.object().shape({
+  name: yup
+    .string()
+    .matches(pattern.str, 'Name must be a string')
+    .min(3, 'Too short, minimum length: 3')
+    .max(20, 'Too long, maximum length: 20')
+    .required(),
+  number: yup.number().typeError().moreThan(12).required(),
+});
 
 export default ContactForm;

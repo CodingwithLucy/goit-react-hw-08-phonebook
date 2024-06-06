@@ -1,0 +1,16 @@
+import React from 'react';
+import ContactForm from '../components/ContactForm/ContactForm.jsx';
+import Contacts from '../components/Contacts/Contacts.jsx';
+
+const ContactsApp = () => {
+  return (
+    <section>
+      <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+        <ContactForm />
+        <Contacts />
+      </div>
+    </section>
+  );
+};
+
+export default ContactsApp;

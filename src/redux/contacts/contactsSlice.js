@@ -1,78 +1,64 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createApi } from '@reduxjs/toolkit/query/react';
 import axios from 'axios';
 
-export const fetchContacts = createAsyncThunk(
-  'contacts/fetchContacts',
-  async () => {
+const axiosBaseQuery =
+  () =>
+  async ({ url, method, data, params }) => {
     try {
-      const response = await axios.get(
-        'https://connections-api.herokuapp.com/api/contacts'
-      );
-      return response.data;
-    } catch (error) {
-      throw new Error('Error fetching contacts: ' + error.message);
+      const result = await axios({ url, method, data, params });
+      return { data: result.data };
+    } catch (axiosError) {
+      let err = axiosError;
+      return {
+        error: {
+          status: err.response?.status,
+          data: err.response?.data || err.message,
+        },
+      };
     }
-  }
-);
+  };
 
-export const addContact = createAsyncThunk(
-  'contacts/addContact',
-  async contact => {
-    try {
-      const response = await axios.post(
-        'https://connections-api.herokuapp.com/api/contacts',
-        contact
-      );
-      return response.data;
-    } catch (error) {
-      throw new Error('Error adding contact: ' + error.message);
-    }
-  }
-);
-
-export const deleteContact = createAsyncThunk(
-  'contacts/deleteContact',
-  async contactId => {
-    try {
-      await axios.delete(
-        `${'https://connections-api.herokuapp.com/api/contacts'}/${contactId}`
-      );
-      return contactId;
-    } catch (error) {
-      throw new Error('Error deleting contact: ' + error.message);
-    }
-  }
-);
-
-const initialState = {
-  contacts: [],
-  filter: '',
-};
-
-const contactsSlice = createSlice({
-  name: 'contacts',
-  initialState,
-  reducers: {
-    setFilter: (state, action) => {
-      state.filter = action.payload;
-    },
-  },
-  extraReducers: builder => {
-    builder
-      .addCase(fetchContacts.fulfilled, (state, action) => {
-        state.contacts = action.payload;
-      })
-      .addCase(addContact.fulfilled, (state, action) => {
-        state.contacts.push(action.payload);
-      })
-      .addCase(deleteContact.fulfilled, (state, action) => {
-        state.contacts = state.contacts.filter(
-          contact => contact.id !== action.payload
-        );
-      });
-  },
+export const contactsApi = createApi({
+  reducerPath: 'contacts',
+  baseQuery: axiosBaseQuery(),
+  tagTypes: ['Contacts'],
+  endpoints: build => ({
+    getContacts: build.query({
+      query: () => ({
+        url: `/contacts`,
+        method: 'GET',
+      }),
+      providesTags: ['Contacts'],
+    }),
+    addContact: build.mutation({
+      query: contact => ({
+        url: `/contacts`,
+        method: 'POST',
+        data: contact,
+      }),
+      invalidatesTags: ['Contacts'],
+    }),
+    deleteContact: build.mutation({
+      query: id => ({
+        url: `/contacts/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Contacts'],
+    }),
+    editContact: build.mutation({
+      query: ({ id, name, number }) => ({
+        url: `/contacts/${id}`,
+        method: 'PATCH',
+        data: { name, number },
+      }),
+      invalidatesTags: ['Contacts'],
+    }),
+  }),
 });
 
-export const { setFilter } = contactsSlice.actions;
-
-export default contactsSlice.reducer;
+export const {
+  useGetContactsQuery,
+  useAddContactMutation,
+  useDeleteContactMutation,
+  useEditContactMutation,
+} = contactsApi;

@@ -1,67 +1,95 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React from 'react';
+import { useFormik } from 'formik';
+import { useDispatch } from 'react-redux';
+import * as yup from 'yup';
+import { register } from '../../redux/auth/operations.js';
 
-export const RegisterForm = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
+const initialValues = {
+  name: '',
+  email: '',
+  password: '',
+};
+const schema = yup.object().shape({
+  name: yup
+    .string()
+    .min(3, 'to short, min: 3')
+    .max(20, 'to long, max: 20')
+    .required('Username is required'),
+  email: yup
+    .string()
+    .email('Email must be a valid email address')
+    .required('Email is required'),
+  password: yup
+    .string()
+    .required('No password provided.')
+    .min(7, 'Password is too short - should be 8 chars minimum.'),
+});
+
+const RegisterForm = () => {
+  const dispatch = useDispatch();
+
+  const formik = useFormik({
+    initialValues,
+    onSubmit: (values, { resetForm }) => {
+      dispatch(register(values));
+      resetForm();
+    },
+    validationSchema: schema,
   });
 
-  const handleChange = e => {
-    const { name, value } = e.target;
-    setFormData(prevData => ({ ...prevData, [name]: value }));
-  };
-
-  const handleSubmit = async e => {
-    e.preventDefault();
-
-    try {
-      const response = await axios.post(
-        'https://connections-api.herokuapp.com/users/signup',
-        formData,
-        {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          },
-        }
-      );
-      console.log('User registered successfully:', response.data);
-    } catch (error) {
-      console.error('Error registering user:', error.message);
-    }
-  };
+  const isDisabled = !(formik.isValid && formik.dirty);
 
   return (
-    <form onSubmit={handleSubmit} autoComplete="off">
-      <label>
-        Username
+    <form noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
+      <h3 style={{ marginBottom: '30px', textTransform: 'uppercase' }}>
+        Register
+      </h3>
+
+      <div>
         <input
+          required
           type="text"
           name="name"
-          value={formData.name}
-          onChange={handleChange}
+          onChange={formik.handleChange}
+          value={formik.values.name}
         />
-      </label>
-      <label>
-        Email
+        {formik.errors.name && formik.touched.name ? (
+          <span>{formik.errors.name}</span>
+        ) : null}
+      </div>
+
+      <div>
         <input
-          type="email"
+          required
+          type="text"
           name="email"
-          value={formData.email}
-          onChange={handleChange}
+          onChange={formik.handleChange}
+          value={formik.values.email}
         />
-      </label>
-      <label>
-        Password
+        {formik.errors.email && formik.touched.email ? (
+          <span>{formik.errors.email}</span>
+        ) : null}
+      </div>
+
+      <div>
         <input
+          required
           type="password"
+          autoComplete="current-password"
           name="password"
-          value={formData.password}
-          onChange={handleChange}
+          onChange={formik.handleChange}
+          value={formik.values.password}
         />
-      </label>
-      <button type="submit">Register</button>
+        {formik.errors.password && formik.touched.password ? (
+          <span>{formik.errors.password}</span>
+        ) : null}
+      </div>
+
+      <button type="submit" disabled={isDisabled}>
+        Create
+      </button>
     </form>
   );
 };
+
+export default RegisterForm;

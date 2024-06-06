@@ -1,123 +1,53 @@
 import { createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { login, logout, refreshUser, register } from './operations';
 
-axios.defaults.baseURL = 'https://connections-api.herokuapp.com/';
-
-const setAuthHeader = token => {
-  axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-};
-
-const clearAuthHeader = () => {
-  axios.defaults.headers.common.Authorization = '';
-};
-
-export const register = createAsyncThunk(
-  'auth/register',
-  async (credentials, thunkAPI) => {
-    try {
-      const res = await axios.post(
-        'https://connections-api.herokuapp.com/users/signup',
-        credentials
-      );
-      setAuthHeader(res.data.token);
-      return res.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
-  }
-);
-
-export const logIn = createAsyncThunk(
-  'auth/login',
-  async (credentials, thunkAPI) => {
-    try {
-      const res = await axios.post(
-        'https://connections-api.herokuapp.com/api/users/login',
-        credentials
-      );
-      setAuthHeader(res.data.token);
-      return res.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
-  }
-);
-
-export const logOut = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
-  try {
-    await axios.post('https://connections-api.herokuapp.com/api/users/logout');
-    clearAuthHeader();
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.message);
-  }
-});
-
-export const refreshUser = createAsyncThunk(
-  'auth/refresh',
-  async (_, thunkAPI) => {
-    const state = thunkAPI.getState();
-    const persistedToken = state.auth.token;
-
-    if (!persistedToken) {
-      return thunkAPI.rejectWithValue('Unable to fetch user');
-    }
-
-    try {
-      setAuthHeader(persistedToken);
-      const res = await axios.get(
-        'https://connections-api.herokuapp.com/api/users/current'
-      );
-      return res.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
-  }
-);
-
-const initialState = {
+export const initialAuthState = {
   user: { name: null, email: null },
   token: null,
-  isLoggedIn: false,
   isRefreshing: false,
 };
 
-const authSlice = createSlice({
+const handlePending = state => {
+  state.isRefreshing = true;
+};
+
+const handleRejected = state => {
+  state.isRefreshing = false;
+};
+
+export const authSlice = createSlice({
   name: 'auth',
-  initialState,
+  initialState: initialAuthState,
   extraReducers: builder => {
     builder
-      .addCase(register.fulfilled, (state, action) => {
-        state.user = action.payload.user;
-        state.token = action.payload.token;
-        state.isLoggedIn = true;
-      })
-      .addCase(logIn.fulfilled, (state, action) => {
-        state.user = action.payload.user;
-        state.token = action.payload.token;
-        state.isLoggedIn = true;
-      })
-      .addCase(logOut.fulfilled, state => {
-        state.user = { name: null, email: null };
-        state.token = null;
-        state.isLoggedIn = false;
-      })
-      .addCase(refreshUser.pending, state => {
-        state.isRefreshing = true;
-      })
-      .addCase(refreshUser.fulfilled, (state, action) => {
-        state.user = action.payload;
-        state.isLoggedIn = true;
+      .addCase(register.pending, handlePending)
+      .addCase(login.pending, handlePending)
+      .addCase(logout.pending, handlePending)
+      .addCase(refreshUser.pending, handlePending)
+      .addCase(register.rejected, handleRejected)
+      .addCase(login.rejected, handleRejected)
+      .addCase(logout.rejected, handleRejected)
+      .addCase(refreshUser.rejected, handleRejected)
+      .addCase(register.fulfilled, (state, { payload }) => {
+        state.user = payload.user;
+        state.token = payload.token;
         state.isRefreshing = false;
       })
-      .addCase(refreshUser.rejected, state => {
+      .addCase(login.fulfilled, (state, { payload }) => {
+        state.user = payload.user;
+        state.token = payload.token;
+        state.isRefreshing = false;
+      })
+      .addCase(logout.fulfilled, (state, { payload }) => {
+        state.user = payload.user;
+        state.token = null;
+        state.isRefreshing = false;
+      })
+      .addCase(refreshUser.fulfilled, (state, { payload }) => {
+        state.user = payload;
         state.isRefreshing = false;
       });
   },
 });
 
 export const authReducer = authSlice.reducer;
-
-export const selectIsLoggedIn = state => state.auth.isLoggedIn;
-export const selectUser = state => state.auth.user;
-export const selectIsRefreshing = state => state.auth.isRefreshing;

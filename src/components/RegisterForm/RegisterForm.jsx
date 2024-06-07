@@ -41,48 +41,63 @@ const RegisterForm = () => {
 
   return (
     <form noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
-      <h3 style={{ marginBottom: '30px', textTransform: 'uppercase' }}>
-        Register
+      <h3
+        style={{
+          marginBottom: '30px',
+          textAlign: 'center',
+          textTransform: 'uppercase',
+        }}
+      >
+        REGISTER
       </h3>
 
       <div>
-        <input
-          required
-          type="text"
-          name="name"
-          onChange={formik.handleChange}
-          value={formik.values.name}
-        />
-        {formik.errors.name && formik.touched.name ? (
-          <span>{formik.errors.name}</span>
-        ) : null}
+        <label>
+          USERNAME
+          <input
+            required
+            type="text"
+            name="name"
+            onChange={formik.handleChange}
+            value={formik.values.name}
+          />
+          {formik.errors.name && formik.touched.name ? (
+            <span>{formik.errors.name}</span>
+          ) : null}
+        </label>
       </div>
 
       <div>
-        <input
-          required
-          type="text"
-          name="email"
-          onChange={formik.handleChange}
-          value={formik.values.email}
-        />
-        {formik.errors.email && formik.touched.email ? (
-          <span>{formik.errors.email}</span>
-        ) : null}
+        <label>
+          EMAIL
+          <input
+            required
+            type="text"
+            name="email"
+            onChange={formik.handleChange}
+            value={formik.values.email}
+          />
+          {formik.errors.email && formik.touched.email ? (
+            <span>{formik.errors.email}</span>
+          ) : null}
+        </label>
       </div>
 
       <div>
-        <input
-          required
-          type="password"
-          autoComplete="current-password"
-          name="password"
-          onChange={formik.handleChange}
-          value={formik.values.password}
-        />
-        {formik.errors.password && formik.touched.password ? (
-          <span>{formik.errors.password}</span>
-        ) : null}
+        <label>
+          PASSWORD
+          <input
+            required
+            type="password"
+            autoComplete="current-password"
+            name="password"
+            onChange={formik.handleChange}
+            value={formik.values.password}
+          />
+          {formik.errors.password && formik.touched.password ? (
+            <span>{formik.errors.password}</span>
+          ) : null}
+        </label>
       </div>
 
       <button type="submit" disabled={isDisabled}>

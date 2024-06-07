@@ -47,34 +47,40 @@ const LoginForm = () => {
           textTransform: 'uppercase',
         }}
       >
-        Log in
+        LOG IN
       </h3>
 
       <div>
-        <input
-          required
-          type="email"
-          name="email"
-          onChange={formik.handleChange}
-          value={formik.values.email}
-        />
-        {formik.errors.email && formik.touched.email ? (
-          <span>{formik.errors.email}</span>
-        ) : null}
+        <label>
+          EMAIL
+          <input
+            required
+            type="email"
+            name="email"
+            onChange={formik.handleChange}
+            value={formik.values.email}
+          />
+          {formik.errors.email && formik.touched.email ? (
+            <span>{formik.errors.email}</span>
+          ) : null}
+        </label>
       </div>
 
       <div>
-        <input
-          required
-          type="password"
-          autoComplete="current-password"
-          name="password"
-          onChange={formik.handleChange}
-          value={formik.values.password}
-        />
-        {formik.errors.password && formik.touched.password ? (
-          <span>{formik.errors.password}</span>
-        ) : null}
+        <label>
+          PASSWORD
+          <input
+            required
+            type="password"
+            autoComplete="current-password"
+            name="password"
+            onChange={formik.handleChange}
+            value={formik.values.password}
+          />
+          {formik.errors.password && formik.touched.password ? (
+            <span>{formik.errors.password}</span>
+          ) : null}
+        </label>
       </div>
 
       <button type="submit" disabled={isDisabled}>

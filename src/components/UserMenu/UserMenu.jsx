@@ -28,21 +28,7 @@ export const UserMenu = () => {
         }}
       >
         <NavLink
-          to="/favorites"
-          style={{
-            '&:hover': {
-              backgroundColor: 'rgba(0,0,0,4)',
-            },
-            '&:focus': {
-              backgroundColor: 'rgba(0,0,0,4)',
-            },
-            color: 'inherit',
-          }}
-        >
-          Star
-        </NavLink>
-        <NavLink
-          to="/contacts"
+          to="/ContactsApp"
           style={{
             '&:hover': {
               backgroundColor: 'rgba(0,0,0,2)',
@@ -57,14 +43,13 @@ export const UserMenu = () => {
         </NavLink>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-        <span>Identity</span>
         <span style={{ fontSize: '16px', lineHeight: 1.6 }}>
           Hello, {user.name}
         </span>
       </div>
       <div>
         <Link
-          to="/contacts"
+          to="/ContactsApp"
           style={{
             display: 'block',
             backgroundColor: 'rgba(255,255,255,0.1)',

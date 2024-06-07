@@ -3,7 +3,7 @@ import { useAuth } from '../hooks/useAuth';
 import { routsPath } from '../path/routes';
 import { Link } from 'react-router-dom';
 
-const { logIn, signUp } = routsPath;
+const { login, signUp } = routsPath;
 
 const Home = () => {
   const el = useRef(null);
@@ -11,7 +11,6 @@ const Home = () => {
 
   return (
     <section>
-      <meta name="description" content="Your phone book manager" />
       <div
         style={{
           display: 'flex',
@@ -49,7 +48,7 @@ const Home = () => {
           <p>
             You can view your{' '}
             <Link
-              to="/contacts"
+              to="/ContactsApp"
               style={{ color: '#fff', textDecoration: 'underline' }}
             >
               contacts
@@ -70,7 +69,7 @@ const Home = () => {
                   textDecoration: 'underline',
                   padding: '5px',
                 }}
-                to={logIn}
+                to={login}
               >
                 log in
               </Link>{' '}

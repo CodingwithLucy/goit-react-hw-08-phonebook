@@ -9,13 +9,11 @@ import 'modern-normalize';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <PersistGate loading={<div>loading...</div>} persistor={persistor}>
-        <BrowserRouter basename="/goit-react-hw-08-phonebook/">
-          <App />
-        </BrowserRouter>
-      </PersistGate>
-    </Provider>
-  </React.StrictMode>
+  <Provider store={store}>
+    <PersistGate loading={<div>loading...</div>} persistor={persistor}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </PersistGate>
+  </Provider>
 );

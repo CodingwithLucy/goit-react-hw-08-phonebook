@@ -8,7 +8,7 @@ const Contacts = () => {
   if (data.length <= 0) {
     return (
       <div style={{ width: '45%', border: 'none' }}>
-        <h2>Contacts here</h2>
+        <h2>Please, add first contact</h2>
       </div>
     );
   }

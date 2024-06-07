@@ -2,7 +2,7 @@ import React, { useEffect, lazy } from 'react';
 import { useDispatch } from 'react-redux';
 import { Routes, Route } from 'react-router-dom';
 import { Layout } from '../Layout.js';
-import { Navigation } from '../Navigation/Navigation.jsx';
+//import { Navigation } from '../Navigation/Navigation.jsx';
 import { PrivateRoute } from '../../routes/PrivateRoute.jsx';
 import { RestrictedRoute } from '../../routes/RestrictedRoute.jsx';
 import { refreshUser } from '../../redux/auth/operations.js';
@@ -16,7 +16,7 @@ const Login = lazy(() => import('../../pages/Login.js'));
 const ContactsApp = lazy(() => import('../../pages/ContactsApp.js'));
 
 const { home, login, register, contactsApp } = routsPath;
-const { toLogIn, toContacts } = redirectPath;
+const { toLogin, toContacts } = redirectPath;
 
 const App = () => {
   const dispatch = useDispatch();
@@ -30,7 +30,6 @@ const App = () => {
     <b>Refreshing user...</b>
   ) : (
     <HelmetProvider>
-      <Navigation />
       <Routes>
         <Route path={home} element={<Layout />}>
           <Route index element={<Home />} />
@@ -49,7 +48,7 @@ const App = () => {
           <Route
             path={contactsApp}
             element={
-              <PrivateRoute component={ContactsApp} redirectTo={toLogIn} />
+              <PrivateRoute component={ContactsApp} redirectTo={toLogin} />
             }
           />
         </Route>

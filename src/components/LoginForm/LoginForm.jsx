@@ -3,6 +3,7 @@ import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
 import { login } from '../../redux/auth/operations.js';
+import '../../index.css';
 
 const initialValues = {
   email: '',
@@ -83,9 +84,11 @@ const LoginForm = () => {
         </label>
       </div>
 
-      <button type="submit" disabled={isDisabled}>
-        Login
-      </button>
+      <center>
+        <button type="submit" disabled={isDisabled}>
+          SUBMIT
+        </button>
+      </center>
     </form>
   );
 };

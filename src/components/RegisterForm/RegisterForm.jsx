@@ -100,9 +100,11 @@ const RegisterForm = () => {
         </label>
       </div>
 
-      <button type="submit" disabled={isDisabled}>
-        Create
-      </button>
+      <center>
+        <button type="submit" disabled={isDisabled}>
+          SUBMIT
+        </button>
+      </center>
     </form>
   );
 };

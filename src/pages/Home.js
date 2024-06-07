@@ -3,7 +3,7 @@ import { useAuth } from '../hooks/useAuth';
 import { routsPath } from '../path/routes';
 import { Link } from 'react-router-dom';
 
-const { login, signUp } = routsPath;
+const { login, register } = routsPath;
 
 const Home = () => {
   const el = useRef(null);
@@ -32,9 +32,9 @@ const Home = () => {
             marginBottom: '10px',
           }}
         >
-          Welcome to the Phonebook
+          Welcome to the Phonebook by Lucy
         </h1>
-        <div style={{ marginBottom: '40px', height: '60px' }}>
+        <div style={{ marginBottom: '10px', height: '60px' }}>
           <span
             style={{
               display: 'inline',
@@ -45,24 +45,29 @@ const Home = () => {
           ></span>
         </div>
         {isLoggedIn ? (
-          <p>
-            You can view your{' '}
+          <p
+            style={{
+              fontSize: '20px',
+              textAlign: 'center',
+            }}
+          >
+            View your
             <Link
               to="/ContactsApp"
               style={{ color: '#fff', textDecoration: 'underline' }}
             >
               contacts
             </Link>
+            here
           </p>
         ) : (
           <div style={{ flexDirection: 'column' }}>
             <p
               style={{
-                fontSize: '16px',
+                fontSize: '20px',
                 textAlign: 'center',
               }}
             >
-              Please{' '}
               <Link
                 style={{
                   color: '#fff',
@@ -71,27 +76,28 @@ const Home = () => {
                 }}
                 to={login}
               >
-                log in
-              </Link>{' '}
-              to your account to view your contacts.
+                Log in
+              </Link>
+              to your account
             </p>
             <p
               style={{
-                fontSize: '16px',
+                fontSize: '20px',
                 textAlign: 'center',
               }}
             >
-              If you are not registered yet, please{' '}
+              Please
               <Link
                 style={{
                   color: '#fff',
                   textDecoration: 'underline',
                   padding: '5px',
                 }}
-                to={signUp}
+                to={register}
               >
                 register
               </Link>
+              to use Phonebook
             </p>
           </div>
         )}

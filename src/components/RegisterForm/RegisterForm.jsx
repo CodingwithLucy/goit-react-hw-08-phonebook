@@ -60,6 +60,7 @@ const RegisterForm = () => {
             name="name"
             onChange={formik.handleChange}
             value={formik.values.name}
+            placeholder="3-20 characters"
           />
           {formik.errors.name && formik.touched.name ? (
             <span>{formik.errors.name}</span>
@@ -76,6 +77,7 @@ const RegisterForm = () => {
             name="email"
             onChange={formik.handleChange}
             value={formik.values.email}
+            placeholder="ex. contact@mail.com"
           />
           {formik.errors.email && formik.touched.email ? (
             <span>{formik.errors.email}</span>
@@ -93,6 +95,7 @@ const RegisterForm = () => {
             name="password"
             onChange={formik.handleChange}
             value={formik.values.password}
+            placeholder="min. 8 characters"
           />
           {formik.errors.password && formik.touched.password ? (
             <span>{formik.errors.password}</span>

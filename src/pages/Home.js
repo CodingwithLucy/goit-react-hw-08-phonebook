@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { useAuth } from '../hooks/useAuth';
-import { routsPath } from '../path/routes';
+import { routsPath } from '../path/routes.js';
 import { Link } from 'react-router-dom';
 
 const { login, register } = routsPath;
@@ -32,7 +32,7 @@ const Home = () => {
             marginBottom: '10px',
           }}
         >
-          Welcome to the Phonebook by Lucy
+          Welcome to the Phonebook made by Lucy
         </h1>
         <div style={{ marginBottom: '10px', height: '60px' }}>
           <span
@@ -54,7 +54,11 @@ const Home = () => {
             View your
             <Link
               to="/ContactsApp"
-              style={{ color: '#fff', textDecoration: 'underline' }}
+              style={{
+                color: '#fff',
+                textDecoration: 'underline',
+                margin: '10px',
+              }}
             >
               contacts
             </Link>

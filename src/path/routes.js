@@ -6,6 +6,6 @@ export const routsPath = {
 };
 
 export const redirectPath = {
-  toLogin: 'Login',
-  toContacts: 'ContactsApp',
+  toLogin: '/Login',
+  toContacts: '/ContactsApp',
 };

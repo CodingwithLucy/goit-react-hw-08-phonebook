@@ -14,14 +14,20 @@ export const UserMenu = () => {
   };
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '40px' }}>
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: '40px',
+      }}
+    >
       <div
         style={{
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
           backgroundColor: 'rgba(255,255,255,0.1)',
-          borderRadius: '20px',
           overflow: 'hidden',
           height: '35px',
           color: 'rgba(255,255,255,0.9)',
@@ -30,20 +36,30 @@ export const UserMenu = () => {
         <NavLink
           to="/ContactsApp"
           style={{
-            '&:hover': {
-              backgroundColor: 'rgba(0,0,0,2)',
-            },
-            '&:focus': {
-              backgroundColor: 'rgba(0,0,0,2)',
-            },
-            color: 'inherit',
+            display: 'block',
+            backgroundColor: 'rgba(255,255,255,0.1)',
+            padding: '8px 15px',
           }}
         >
           Contacts
         </NavLink>
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-        <span style={{ fontSize: '16px', lineHeight: 1.6 }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '15px',
+          margin: '15px',
+        }}
+      >
+        <span
+          style={{
+            fontSize: '25px',
+            lineHeight: 1.6,
+            fontWeight: 'bolder',
+            color: '#fff',
+          }}
+        >
           Hello, {user.name}
         </span>
       </div>
@@ -54,11 +70,10 @@ export const UserMenu = () => {
             display: 'block',
             backgroundColor: 'rgba(255,255,255,0.1)',
             padding: '8px 15px',
-            borderRadius: '10px',
           }}
           onClick={handleLogOut}
         >
-          Logout
+          Log out
         </Link>
       </div>
     </div>

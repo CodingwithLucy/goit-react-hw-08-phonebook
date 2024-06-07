@@ -11,7 +11,13 @@ const Filter = () => {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
       <span>Find your contact</span>
       <input
         type="text"

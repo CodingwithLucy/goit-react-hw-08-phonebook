@@ -32,16 +32,36 @@ const ContactList = () => {
   return (
     <>
       {isLoading && <h2>loading...</h2>}
-      <div>
-        <span>Name:</span>
-        <span>Phone:</span>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          paddingLeft: '60px',
+          paddingRight: '60px',
+          paddingTop: '40px',
+        }}
+      >
+        <span>Contact name</span>
+        <span>Phone number</span>
+        <span>Action</span>
       </div>
-      <ul>
+      <ul style={{ padding: 0 }}>
         {contacts.map(({ id, name, number }) => (
           <li key={nanoid()}>
-            <span>{name}:</span>
-            <span>{number}</span>
-            <button onClick={() => handleDelete(id)}>Delete</button>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingLeft: '80px',
+                paddingRight: '80px',
+              }}
+            >
+              <span>{name}</span>
+              <span>{number}</span>
+              <button onClick={() => handleDelete(id)}>Delete</button>
+            </div>
           </li>
         ))}
       </ul>

@@ -15,12 +15,18 @@ const Contacts = () => {
 
   return (
     <div style={{ minWidth: '600px', maxWidth: '45%' }}>
-      <Filter />
-      <div style={{ position: 'relative', width: '100%' }}>
+      <div
+        style={{
+          width: '100%',
+          padding: '20px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '30px',
+        }}
+      >
         <h2>Contacts</h2>
-        <div style={{ position: 'absolute', top: 10, right: 0 }}>
-          {data.length} contacts
-        </div>
+        <div>{data.length} contacts total</div>
         {isFetching && (
           <div
             style={{
@@ -34,6 +40,7 @@ const Contacts = () => {
           </div>
         )}
       </div>
+      <Filter />
       <ContactList />
     </div>
   );

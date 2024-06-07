@@ -55,15 +55,16 @@ const ContactForm = () => {
           name="number"
           onChange={formik.handleChange}
           value={formik.values.number}
-          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
         />
         {formik.errors.number && formik.touched.number ? (
           <span>{formik.errors.number}</span>
         ) : null}
       </div>
-      <button type="submit" disabled={isDisabled}>
-        {isLoading ? 'Adding contact...' : 'Add contact'}
-      </button>
+      <center>
+        <button type="submit" disabled={isDisabled}>
+          {isLoading ? 'Adding contact...' : 'Add contact'}
+        </button>
+      </center>
     </form>
   );
 };

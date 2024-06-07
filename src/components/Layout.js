@@ -9,7 +9,7 @@ export const Layout = () => {
       style={{
         maxWidth: 960,
         margin: '0 auto',
-        padding: '0 16px',
+        padding: '0 20px',
       }}
     >
       <AppBar />
